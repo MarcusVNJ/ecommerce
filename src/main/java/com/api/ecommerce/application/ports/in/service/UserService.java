@@ -51,7 +51,7 @@ public class UserService implements UserUC {
     }
 
     private Authentication authenticationUser(LoginRequest data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+        final UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         return this.authenticationManager.authenticate(usernamePassword);
     }
 
