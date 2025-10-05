@@ -1,6 +1,6 @@
 package com.api.ecommerce.infrastructure.controller.api;
 
-import com.api.ecommerce.application.ports.in.service.UserService;
+import com.api.ecommerce.infrastructure.service.UserService;
 import com.api.ecommerce.infrastructure.controller.resource.AuthResource;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginResponse;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginRequest;

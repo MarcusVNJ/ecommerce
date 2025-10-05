@@ -1,6 +1,6 @@
-package com.api.ecommerce.application.ports.in.service;
+package com.api.ecommerce.infrastructure.service;
 
-import com.api.ecommerce.application.ports.in.UserUC;
+import com.api.ecommerce.application.ports.in.service.UserUC;
 import com.api.ecommerce.application.ports.out.repository.UserRepository;
 import com.api.ecommerce.domain.models.User;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.RegisterRequest;

@@ -1,4 +1,4 @@
-package com.api.ecommerce.application.ports.in;
+package com.api.ecommerce.application.ports.in.service;
 
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.RegisterRequest;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginRequest;
