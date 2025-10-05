@@ -17,11 +17,11 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-    private final SpringUserRepository userRepository;
+    private final AuthorizationService authorizationService;
 
-    public SecurityFilter(TokenService tokenService, SpringUserRepository userRepository) {
+    public SecurityFilter(TokenService tokenService, SpringUserRepository userRepository, AuthorizationService authorizationService) {
         this.tokenService = tokenService;
-        this.userRepository = userRepository;
+        this.authorizationService = authorizationService;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var email = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByEmail(email).orElse(null); //TODO: reveja este trecho, chame a service correta
+            UserDetails user = authorizationService.loadUserByUsername(email);
 
             if (user != null) {
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
