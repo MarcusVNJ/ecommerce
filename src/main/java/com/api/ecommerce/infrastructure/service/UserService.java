@@ -36,7 +36,8 @@ public class UserService implements UserUC {
     @Override
     @Transactional
     public void registerUser(RegisterRequest data) {
-        User newUser = userMapper.toUser(data).withPasswordEncode(passwordEncoder.encode(data.password()));
+        User newUser = userMapper.toUser(data).copy()
+                .password(passwordEncoder.encode(data.password())).build();
 
         existEmail(newUser.email());
 

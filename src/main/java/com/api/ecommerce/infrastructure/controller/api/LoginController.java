@@ -1,6 +1,6 @@
 package com.api.ecommerce.infrastructure.controller.api;
 
-import com.api.ecommerce.infrastructure.service.UserService;
+import com.api.ecommerce.application.ports.in.service.UserUC;
 import com.api.ecommerce.infrastructure.controller.resource.AuthResource;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginResponse;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginRequest;
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController implements AuthResource {
-    private final UserService userService;
+    private final UserUC userUseCase;
 
-    public LoginController(UserService userService) {
-        this.userService = userService;
+    public LoginController(UserUC userUseCase) {
+        this.userUseCase = userUseCase;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> execute(@RequestBody @Valid LoginRequest data) {
-        return ResponseEntity.ok(userService.loginUser(data));
+        return ResponseEntity.ok(userUseCase.loginUser(data));
     }
 
 }

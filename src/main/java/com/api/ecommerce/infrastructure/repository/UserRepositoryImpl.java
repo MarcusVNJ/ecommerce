@@ -4,11 +4,11 @@ import com.api.ecommerce.application.ports.out.repository.UserRepository;
 import com.api.ecommerce.domain.models.User;
 import com.api.ecommerce.infrastructure.entity.UserEntity;
 import com.api.ecommerce.infrastructure.mapper.UserMapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Repository
+@Component
 public class UserRepositoryImpl implements UserRepository {
 
     public final SpringUserRepository userRepository;

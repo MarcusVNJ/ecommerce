@@ -23,12 +23,13 @@ public interface UserMapper {
     )
     User toUser(UserEntity userEntity);
 
+    @InheritInverseConfiguration
+    @Mapping(target = "authorities", ignore = true)
+    UserEntity toUserEntity(User user);
+
     @Mapping(target = "id", ignore = true)
     User toUser(RegisterRequest user);
 
-    Iterable<User> toUsers( Iterable<UserEntity> userEntities);
-
-    @InheritInverseConfiguration
-    UserEntity toUserEntity(User user);
+    Iterable<User> toUsers(Iterable<UserEntity> userEntities);
 
 }
