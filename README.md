@@ -83,3 +83,8 @@ Authorization: <seu-token-jwt>
 Para facilitar os testes, você pode usar a coleção do Postman que já contém todas as chamadas aos endpoints da API. Acesse e importe a coleção pelo link abaixo:
 
 [**Acessar Coleção do Postman**](https://web.postman.co/workspace/My-Workspace~a7ede61a-c433-4ffb-8554-0b001f3da6c5/collection/14591018-d21aa2e5-5e83-4cdd-8048-a1ad768c5608?action=share&source=copy-link&creator=14591018)
+
+
+### Melhorias
+
+Adição dos testes. (Não fiz por falta de tempo mesmo 🥲)
