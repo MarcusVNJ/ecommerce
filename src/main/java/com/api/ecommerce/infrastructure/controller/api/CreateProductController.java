@@ -28,7 +28,7 @@ public class CreateProductController implements ProductResource {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
+    public ResponseEntity<ProductResponse> execute(@Valid @RequestBody ProductRequest request) {
         final ProductResponse product = productUseCase.createProduct(request);
 
         final URI location = productLocationGeneration(product.id());

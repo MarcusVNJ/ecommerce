@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class GetAllProducts implements ProductResource {
+public class GetAllProductsController implements ProductResource {
      private final ProductUC productUseCase;
 
-     public GetAllProducts(ProductUC productUseCase) {
+     public GetAllProductsController(ProductUC productUseCase) {
          this.productUseCase = productUseCase;
      }
 
      @GetMapping
-     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+     @PreAuthorize("hasRole('USER')")
      public ResponseEntity<List<ProductResponse>> execute() {
          return ResponseEntity.ok(productUseCase.findAllProducts());
      }

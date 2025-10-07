@@ -6,6 +6,9 @@ import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginResponse;
 
 
 public interface UserUC {
+
     void registerUser(RegisterRequest data);
+
     LoginResponse loginUser(LoginRequest data);
+
 }

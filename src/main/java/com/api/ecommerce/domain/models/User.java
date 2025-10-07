@@ -2,8 +2,10 @@ package com.api.ecommerce.domain.models;
 
 import com.api.ecommerce.domain.enums.UserRole;
 
+import java.util.UUID;
+
 public record User(
-        Long id,
+        UUID id,
         String name,
         String email,
         String password,
@@ -13,7 +15,7 @@ public record User(
         return new UserBuilder(this);
     }
     public static class UserBuilder {
-        private Long id;
+        private UUID id;
         private String name;
         private String email;
         private String password;
@@ -27,7 +29,7 @@ public record User(
             this.role = user.role;
         }
 
-        public UserBuilder id(Long id) {
+        public UserBuilder id(UUID id) {
             this.id = id;
             return this;
         }

@@ -1,6 +1,5 @@
 package com.api.ecommerce.application.ports.in.service;
 
-import com.api.ecommerce.domain.models.Product;
 import com.api.ecommerce.infrastructure.dto.ProductDTOs.ProductResponse;
 import com.api.ecommerce.infrastructure.dto.ProductDTOs.ProductUpdateRequest;
 import com.api.ecommerce.infrastructure.dto.ProductDTOs.ProductRequest;
@@ -20,4 +19,5 @@ public interface ProductUC {
     ProductResponse updateProduct(UUID id, ProductUpdateRequest product);
 
     void deleteProductById(UUID id);
+
 }

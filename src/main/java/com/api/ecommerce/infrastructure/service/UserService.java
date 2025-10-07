@@ -6,7 +6,7 @@ import com.api.ecommerce.domain.models.User;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.RegisterRequest;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginResponse;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginRequest;
-import com.api.ecommerce.infrastructure.entity.UserEntity;
+import com.api.ecommerce.infrastructure.security.UserDetailsImpl;
 import com.api.ecommerce.infrastructure.mapper.UserMapper;
 import com.api.ecommerce.infrastructure.security.TokenService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,7 +47,7 @@ public class UserService implements UserUC {
     @Override
     public LoginResponse loginUser(LoginRequest data) {
         Authentication authenticatedUser = this.authenticationUser(data);
-        final String token = tokenService.generateToken((UserEntity) authenticatedUser.getPrincipal());
+        final String token = tokenService.generateToken((UserDetailsImpl) authenticatedUser.getPrincipal());
         return new LoginResponse(token);
     }
 

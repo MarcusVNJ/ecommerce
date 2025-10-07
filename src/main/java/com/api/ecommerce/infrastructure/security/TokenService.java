@@ -1,6 +1,5 @@
 package com.api.ecommerce.infrastructure.security;
 
-import com.api.ecommerce.infrastructure.entity.UserEntity;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -21,12 +20,12 @@ public class TokenService {
     @Value("${api.security.token.expiration-hours}")
     private long expirationHours;
 
-    public String generateToken(UserEntity user) {
+    public String generateToken(UserDetailsImpl userDetails) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("ecommerce-api")
-                    .withSubject(user.getEmail())
+                    .withSubject(userDetails.getUsername())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
@@ -43,7 +42,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            return "";
+            throw new RuntimeException("Erro ao validar token JWT", exception);
         }
     }
 
@@ -51,4 +50,3 @@ public class TokenService {
         return LocalDateTime.now().plusHours(expirationHours).toInstant(ZoneOffset.of("-03:00"));
     }
 }
-

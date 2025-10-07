@@ -17,14 +17,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class UserEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     @Column(unique = true)
     private String email;
@@ -35,7 +36,7 @@ public class UserEntity implements UserDetails {
 
     public UserEntity() {}
 
-    public UserEntity(Long id, String name, String email, String password, UserRole role) {
+    public UserEntity(UUID id, String name, String email, String password, UserRole role) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -43,8 +44,8 @@ public class UserEntity implements UserDetails {
         this.role = role;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }
@@ -53,9 +54,9 @@ public class UserEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority(UserRole.ADMIN.getRole()), new SimpleGrantedAuthority(UserRole.USER.getRole()));
         }
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(UserRole.USER.getRole()));
     }
 
     @Override
@@ -63,10 +64,10 @@ public class UserEntity implements UserDetails {
         return this.email;
     }
 
-
     @Override
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
     public UserRole getRole() { return role; }
     public void setRole(UserRole role) { this.role = role; }
+
 }
