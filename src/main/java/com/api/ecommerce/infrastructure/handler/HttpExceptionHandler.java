@@ -3,6 +3,7 @@ package com.api.ecommerce.infrastructure.handler;
 import com.api.ecommerce.domain.exception.BusinessRuleException;
 import com.api.ecommerce.domain.exception.MappingException;
 import com.api.ecommerce.domain.exception.ResourceNotFoundException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +35,14 @@ public class HttpExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleMappingException(MappingException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno durante o processamento de dados.");
         problemDetail.setTitle("Erro de Mapeamento Interno");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ProblemDetail TokenExpiredException(MappingException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Token invalido");
+        problemDetail.setTitle("Erro ao validar seu token");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }

@@ -90,3 +90,5 @@ Para facilitar os testes, você pode usar a coleção do Postman que já contém
 Adição dos testes. (Não fiz por falta de tempo mesmo 🥲).
 
 Adicionar documentação via swagger.
+
+Melhorar o tratamento de erros.
