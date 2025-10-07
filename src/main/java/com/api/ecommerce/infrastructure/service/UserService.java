@@ -9,6 +9,7 @@ import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginRequest;
 import com.api.ecommerce.infrastructure.security.UserDetailsImpl;
 import com.api.ecommerce.infrastructure.mapper.UserMapper;
 import com.api.ecommerce.infrastructure.security.TokenService;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,14 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService implements UserUC {
 
-    private final UserRepository userRepositoryPort;
+    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepositoryPort, AuthenticationManager authenticationManager, TokenService tokenService, UserMapper userMapper, PasswordEncoder passwordEncoder) {
-        this.userRepositoryPort = userRepositoryPort;
+    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, TokenService tokenService, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.userMapper = userMapper;
@@ -41,7 +42,7 @@ public class UserService implements UserUC {
 
         existEmail(newUser.email());
 
-        userRepositoryPort.save(newUser);
+        userRepository.save(newUser);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class UserService implements UserUC {
     }
 
     private void existEmail(String email) {
-        if (userRepositoryPort.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Usuário com este e-mail já existe.");
         }
     }

@@ -6,6 +6,7 @@ import com.api.ecommerce.domain.models.Product;
 import com.api.ecommerce.infrastructure.dto.ProductDTOs.ProductResponse;
 import com.api.ecommerce.infrastructure.dto.ProductDTOs.ProductUpdateRequest;
 import com.api.ecommerce.infrastructure.dto.ProductDTOs.ProductRequest;
+import com.api.ecommerce.infrastructure.repository.SpringOrderItemRepository;
 import com.api.ecommerce.infrastructure.mapper.ProductMapper;
 
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,12 @@ public class ProductService implements ProductUC {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final SpringOrderItemRepository orderItemRepository;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper, SpringOrderItemRepository orderItemRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -59,7 +62,8 @@ public class ProductService implements ProductUC {
         if (!productRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
 
-        final Product product = productMapper.toDomain(productToUpdate);
+        final Product product = productMapper.toDomain(productToUpdate)
+                .copy().id(id).build();
 
         productRepository.save(product);
 
@@ -71,6 +75,9 @@ public class ProductService implements ProductUC {
     public void deleteProductById(UUID id) {
         if (!productRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
+
+        if (orderItemRepository.existsByProductId(id))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Não é possível deletar o produto, pois ele está associado a um ou mais pedidos.");
 
         productRepository.deleteById(id);
     }

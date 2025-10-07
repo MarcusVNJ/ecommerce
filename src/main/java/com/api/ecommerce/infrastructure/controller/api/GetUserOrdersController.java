@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class GetUserOrders implements OrderResource {
+public class GetUserOrdersController implements OrderResource {
     final OrderUC orderUseCase;
 
-    public GetUserOrders(OrderUC orderUseCase) {
+    public GetUserOrdersController(OrderUC orderUseCase) {
         this.orderUseCase = orderUseCase;
     }
 
