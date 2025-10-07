@@ -6,21 +6,16 @@ import com.api.ecommerce.infrastructure.entity.UserEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    @Mappings(
-            {
-                    @Mapping(source = "id", target = "id"),
-                    @Mapping(source = "name", target = "name"),
-                    @Mapping(source = "email", target = "email"),
-                    @Mapping(source = "password", target = "password"),
-                    @Mapping(source = "role", target = "role"),
 
-            }
-    )
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "email", target = "email")
+    @Mapping(source = "password", target = "password")
+    @Mapping(source = "role", target = "role")
     User toUser(UserEntity userEntity);
 
     @InheritInverseConfiguration
