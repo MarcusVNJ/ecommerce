@@ -3,6 +3,9 @@ package com.api.ecommerce.infrastructure.service;
 import com.api.ecommerce.application.ports.in.service.OrderUC;
 import com.api.ecommerce.application.ports.out.repository.OrderRepository;
 import com.api.ecommerce.application.ports.out.repository.ProductRepository;
+import com.api.ecommerce.domain.exception.BusinessRuleException;
+import com.api.ecommerce.domain.exception.MappingException;
+import com.api.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.ecommerce.domain.enums.OrderStatus;
 import com.api.ecommerce.domain.models.Order;
 import com.api.ecommerce.domain.models.OrderItem;
@@ -11,11 +14,8 @@ import com.api.ecommerce.infrastructure.dto.OrderDTOs.OrderResponse;
 import com.api.ecommerce.infrastructure.dto.OrderDTOs.CreateOrderRequest;
 import com.api.ecommerce.infrastructure.mapper.OrderMapper;
 import com.api.ecommerce.infrastructure.security.UserDetailsImpl;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,11 +49,11 @@ public class OrderService implements OrderUC {
     }
 
     @Override
-    @Transactional(rollbackFor = ResponseStatusException.class)
+    @Transactional
     public OrderResponse processPayment(UUID orderId, UserDetailsImpl user) {
 
         if (!isOrderOwnedByUser(orderId, user))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado ao processar pagamento");
+            throw new ResourceNotFoundException("Pedido não encontrado ou não pertence ao usuário.");
 
         Optional<Order> orderProcessed = orderRepository.findById(orderId)
                 .map(order -> {
@@ -67,7 +67,7 @@ public class OrderService implements OrderUC {
                 });
 
         return orderProcessed.map(orderMapper::toResponseDTO).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Problema no processamento da resposta"));
+                new MappingException("Pedido não encontrado após tentativa de processamento."));
     }
 
     @Override
@@ -81,10 +81,10 @@ public class OrderService implements OrderUC {
     private List<OrderItem> itemValidation(List<OrderItem> items) {
         return items.stream().map(item -> {
             Product product = productRepository.findById(item.productId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Produto com ID " + item.productId() + " não encontrado."));
 
             if (product.stockQuantity() < item.quantity())
-                throw new ResponseStatusException(HttpStatus.GONE, "Produto indisponível");
+                throw new BusinessRuleException("Estoque insuficiente para o produto: " + product.name());
 
             productRepository.save(product.copy().stockQuantity(product.stockQuantity() - item.quantity()).build());
 
@@ -94,7 +94,7 @@ public class OrderService implements OrderUC {
 
     private boolean isOrderOwnedByUser(UUID orderId, UserDetailsImpl user) {
         Order order = findOrderById(orderId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido com ID " + orderId + " não encontrado."));
         return order.userId().equals(user.getId());
     }
 
@@ -113,8 +113,7 @@ public class OrderService implements OrderUC {
     }
 
     private List<OrderItem> getOrderItems(CreateOrderRequest request) {
-        return request.items().stream()
-                .map(orderMapper::toDomain).toList();
+        return request.items().stream().map(orderMapper::toDomain).toList();
     }
 
 }

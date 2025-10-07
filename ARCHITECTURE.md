@@ -1,6 +1,6 @@
 # Arquitetura do Projeto
 
-Este projeto utiliza a **Arquitetura Hexagonal**. Esta arquitetura promove um baixo acoplamento entre a lógica de negócio e as tecnologias e frameworks utilizados, facilitando a manutenção, testabilidade e evolução do sistema.
+Este projeto utiliza a **Arquitetura Hexagonal** (também conhecida como Arquitetura de Portas e Adaptadores). Esta arquitetura promove um baixo acoplamento entre a lógica de negócio e as tecnologias e frameworks utilizados, facilitando a manutenção, testabilidade e evolução do sistema.
 
 A estrutura do projeto é dividida em três pacotes principais:
 
@@ -15,7 +15,9 @@ O pacote `domain` é o coração da aplicação. Ele contém a lógica de negóc
 
 ### Pacotes Internos:
 
-*   `model`: Contém as entidades de domínio, objetos de valor e agregados. É aqui que a lógica de negócio e as regras de domínio são definidas.
+*   `models`: Contém as entidades de domínio, objetos de valor e agregados. É aqui que a lógica de negócio e as regras de domínio são definidas.
+*   `enums`: Contém as enumerações utilizadas no domínio da aplicação.
+*   `exception`: Contém as exceções personalizadas do domínio, que representam erros de negócio.
 
 ## 2. `application`
 
@@ -54,3 +56,5 @@ O pacote `infrastructure` é a camada mais externa da arquitetura. Ele contém a
 *   `config`: Contém as classes de configuração da aplicação, como a configuração do Spring.
 *   `security`: Contém classes relacionadas à segurança, como autenticação e autorização.
 *   `dto`: Contém os Data Transfer Objects (DTOs) utilizados para a comunicação entre as camadas, especialmente para a transferência de dados de e para os controllers.
+*   `mapper`: Contém classes responsáveis por mapear objetos de uma camada para outra (ex: DTO para Entidade de Domínio, ou Entidade de Domínio para Entidade JPA).
+*   `handler`: Contém handlers globais, como manipuladores de exceção (`@ControllerAdvice`), para tratar erros de forma centralizada.

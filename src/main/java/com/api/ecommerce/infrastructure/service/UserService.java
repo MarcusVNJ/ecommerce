@@ -2,6 +2,7 @@ package com.api.ecommerce.infrastructure.service;
 
 import com.api.ecommerce.application.ports.in.service.UserUC;
 import com.api.ecommerce.application.ports.out.repository.UserRepository;
+import com.api.ecommerce.domain.exception.BusinessRuleException;
 import com.api.ecommerce.domain.models.User;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.RegisterRequest;
 import com.api.ecommerce.infrastructure.dto.AuthDTOs.LoginResponse;
@@ -59,7 +60,7 @@ public class UserService implements UserUC {
 
     private void existEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("Usuário com este e-mail já existe.");
+            throw new BusinessRuleException("Usuário com este e-mail já existe.");
         }
     }
 
